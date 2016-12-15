@@ -13,11 +13,13 @@
     "ejs": "~2.5.2",
     "express": "~4.14.0",
     "firebase": "^3.6.4",
+    "formidable": "^1.0.17",
     "less-middleware": "~2.2.0",
     "morgan": "~1.7.0",
     "serve-favicon": "~2.3.0",
     "webpack-dev-middleware": "^1.8.4",
-    "whatwg-fetch": "^2.0.1"
+    "whatwg-fetch": "^2.0.1",
+    "xlsx2json": "^1.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.20.0",
