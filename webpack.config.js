@@ -29,7 +29,11 @@ module.exports = {
             {
                 test: /\.less$/,
                 loader: ExtractTextPlugin.extract("style", "css!less")
-            }
+            },
+            {test: /\.(woff|woff2)$/, loader: "url-loader?limit=10000&mimetype=application/font-woff"},
+            {test: /\.ttf$/, loader: "file-loader"},
+            {test: /\.eot$/, loader: "file-loader"},
+            {test: /\.svg$/, loader: "file-loader"}
         ],
         noParse: /angular\/angular.js/
     },
@@ -43,6 +47,6 @@ module.exports = {
                 comments: false
             }
         }),
-        new ExtractTextPlugin("app.bundle.css")
+        new ExtractTextPlugin("style.css")
     ]
 };

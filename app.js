@@ -46,7 +46,7 @@ if ("production" !== process.env.NODE_ENV) {
     },
     // watch options (only lazy: false)
 
-    publicPath: "/assets/",
+    publicPath: "/",
     // public path to bind the middleware to
     // use the same as in webpack
 
