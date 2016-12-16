@@ -3,8 +3,42 @@
   <head>
     <title><%= title %></title>
     <script src="/app.bundle.js"></script>
+    <link rel="stylesheet" href="/style.css">
   </head>
   <body>
+  <div class="container">
+    <div class="row">
+      <div class="page-header">
+        <h1>Excel upload demo</h1>
+      </div>
+      <div ng-controller="DocumentController as documents" class="panel panel-primary">
+        <div class="panel-heading">Uploaded so far</div>
+        <div class="panel-body">
+          <button type="button" class="btn btn-success">Upload file</button>
+          <button ng-click="refreshList()" type="button" class="btn btn-success">Refresh</button>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <td>Name</td>
+              <td>Filename</td>
+              <td>link</td>
+              <td>sum</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="document in documents.items">
+              <td>{{document.name}}</td>
+              <td>{{document.file}}</td>
+              <td>{{document.path}}</td>
+              <td>{{document.sum}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
   </body>
 </html>
