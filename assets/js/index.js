@@ -1,31 +1,27 @@
 "use strict";
 
 import angular from "angular";
-import "whatwg-fetch";
 //import "bootstrap";
 require("../styles/index.less");
 
 const appExcel = angular.module("appExcel",[]);
-appExcel.controller("DocumentController", function () {
-    let documents = this;
 
-    documents.items = [];
+appExcel.controller("DocumentController", ["$scope", "$http", function($scope, $http) {
 
-    documents.getItems = function () {
-        return fetch("/docs")
-            .then((response) => response.json());
+    $scope.items = [];
+
+    $scope.getItems = function () {
+        return $http.get("/docs")
+            .then((response) => response.data);
     };
 
-    documents.refreshList = function () {
-        documents.getItems().then(function(data) {
-            documents.items = data;
-            console.log(documents.items);
+    $scope.refreshList = function () {
+        $scope.getItems().then(function(data) {
+            $scope.items = data;
+            console.log($scope.items);
         });
     };
 
-    documents.refreshList();
-
-
-});
+}]);
 
 export default appExcel;

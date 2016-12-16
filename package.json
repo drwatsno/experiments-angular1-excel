@@ -19,7 +19,6 @@
     "morgan": "~1.7.0",
     "serve-favicon": "~2.3.0",
     "webpack-dev-middleware": "^1.8.4",
-    "whatwg-fetch": "^2.0.1",
     "xlsx2json": "^1.0.0"
   },
   "devDependencies": {
