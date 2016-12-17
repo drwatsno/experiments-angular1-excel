@@ -2,7 +2,6 @@
 <html ng-app="appExcel">
   <head>
     <title><%= title %></title>
-    <script src="/app.bundle.js"></script>
     <link rel="stylesheet" href="/style.css">
   </head>
   <body>
@@ -14,11 +13,10 @@
       <div ng-controller="DocumentController as documents" class="panel panel-primary">
         <div class="panel-heading">Uploaded so far</div>
         <div class="panel-body">
-          <button type="button" class="btn btn-success">Upload file</button>
-          <button ng-click="refreshList()" type="button" class="btn btn-success">Refresh</button>
+          <button ng-click="selectFile()" type="button" class="btn btn-success">Add file...</button>
         </div>
 
-        <table class="table">
+        <table class="table" ng-class="refreshing?'loading':''">
           <thead>
             <tr>
               <td>Name</td>
@@ -39,6 +37,6 @@
       </div>
     </div>
   </div>
-
+  <script src="/app.bundle.js"></script>
   </body>
 </html>
