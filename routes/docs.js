@@ -4,25 +4,17 @@ const router = express.Router();
 const db = require("../modules/db");
 const xlsx2json = require("xlsx2json");
 const multer  = require("multer");
+const validateFile = require("../modules/shared/validateFile");
 const upload = multer({
     dest: options.uploadPath,
     fileFilter: function (req, file, cb) {
-            let errors = "", toUpload = true;
-            if (!file.mimetype.match(/(ms-excel|openxmlformats-officedocument\.spreadsheetml\.sheet)/g)) {
-                errors += "The file is not correct xls or xlsx file. ";
-                toUpload = false;
-            }
-
-            if (file.size >= options.maxFileSize) {
-                errors += `Size of file exceeds maximum of ${options.maxFileSize / 1024 / 1024}MB. `;
-                toUpload = false;
-            }
-
-            if (toUpload) {
-                cb(null, true);
-            } else {
-                cb(new Error(errors))
-            }
+            validateFile(file, function (toUpload, errors) {
+                if (toUpload) {
+                    cb(null, true);
+                } else {
+                    cb(new Error(errors))
+                }
+            });
     },
     limits: {
         files: 1,
