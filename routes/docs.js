@@ -1,8 +1,34 @@
+const options = require("../options");
 const express = require("express");
 const router = express.Router();
 const db = require("../modules/db");
 const xlsx2json = require("xlsx2json");
-const formidable = require("formidable");
+const multer  = require("multer");
+const upload = multer({
+    dest: options.uploadPath,
+    fileFilter: function (req, file, cb) {
+            let errors = "", toUpload = true;
+            if (!file.mimetype.match(/(ms-excel|openxmlformats-officedocument\.spreadsheetml\.sheet)/g)) {
+                errors += "The file is not correct xls or xlsx file. ";
+                toUpload = false;
+            }
+
+            if (file.size >= options.maxFileSize) {
+                errors += `Size of file exceeds maximum of ${options.maxFileSize / 1024 / 1024}MB. `;
+                toUpload = false;
+            }
+
+            if (toUpload) {
+                cb(null, true);
+            } else {
+                cb(new Error(errors))
+            }
+    },
+    limits: {
+        files: 1,
+        fileSize: options.maxFileSize
+    }
+});
 
 router.get("/", function (req, res, next) {
     db.getDocuments()
@@ -14,40 +40,28 @@ router.get("/", function (req, res, next) {
         })
 });
 
-router.post("/", function (req, res, next) {
-    let form = new formidable.IncomingForm();
-    form.uploadDir = "./uploads";
-    form.keepExtensions = true;
-    console.log("post file");
-
-    form.on("error", function (err) {
-        res.status(500).json(err);
-    });
-
-    form.on("file", function (name, file) {
+router.post("/", upload.single("table"), function (req, res, next) {
+        let file = req.file;
         xlsx2json("./" + file.path, {
             dataStartingRow: 2,
             mapping: {
                 "col_1": "A"
             }
         })
-            .then(function (jsonArray) {
-                   return db.addDocument(file.name, file.path, jsonArray[0].reduce(function (prev, cur) {
-                            return Number(prev.col_1 || prev) + Number(cur.col_1 || cur);
-                        })
-                    )
-                }
-            )
-            .then(function (sum) {
-                res.json({
-                    sum: sum
-                });
-            })
-            .catch(function (err) {
-                res.json(err);
+        .then(function (jsonArray) {
+                return db.addDocument(file.originalname, file.path, jsonArray[0].reduce(function (prev, cur) {
+                        return Number(prev.col_1 || prev) + Number(cur.col_1 || cur);
+                    })
+                )
+            }
+        )
+        .then(function (sum) {
+            res.json({
+                sum: sum
             });
-    });
-
-    form.parse(req);
+        })
+        .catch(function (err) {
+            res.json(err);
+        });
 });
 module.exports = router;

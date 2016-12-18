@@ -28,7 +28,7 @@ appExcel.controller("DocumentController", ["$scope", "$http", function($scope, $
     $scope.postFiles = function(files) {
         if (files) {
             var data = new FormData();
-            data.append("file1", files[0]);
+            data.append("table", files[0]);
             $http({
                 method: 'POST',
                 url: '/docs',
@@ -37,10 +37,11 @@ appExcel.controller("DocumentController", ["$scope", "$http", function($scope, $
                 },
                 data: data
             }).then(function (response) {
-                    console.log(response);
                     $scope.refreshList();
                 }, function (err) {
-                    console.log(err);
+                    if (err.data.error) {
+                        alert(err.data.error);
+                    }
                 });
 
         }
